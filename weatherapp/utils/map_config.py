@@ -1,3 +1,7 @@
+# nw_latitude = 81.50
+# nw_longitude = 35.15
+# se_latitude = 60.35
+# se_longitude = 65.55
 
 # Крайние точки с которых берутся данные
 NW_LATITUDE = 67

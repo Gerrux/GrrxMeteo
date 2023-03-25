@@ -51,6 +51,7 @@ fig.subplots_adjust(right=0.4)
 #
 # plt.savefig('colorbar.png')
 
+
 class MidpointNormalize(mpl.colors.Normalize):
     def __init__(self, vmin=None, vmax=None, vcenter=None, clip=False):
         self.vcenter = vcenter
@@ -60,21 +61,20 @@ class MidpointNormalize(mpl.colors.Normalize):
         # I'm ignoring masked values and all kinds of edge cases to make a
         # simple example...
         # Note also that we must extrapolate beyond vmin/vmax
-        x, y = [self.vmin, self.vcenter, self.vmax], [0, 0.5, 1.]
-        return np.ma.masked_array(np.interp(value, x, y,
-                                            left=-np.inf, right=np.inf))
+        x, y = [self.vmin, self.vcenter, self.vmax], [0, 0.5, 1.0]
+        return np.ma.masked_array(np.interp(value, x, y, left=-np.inf, right=np.inf))
 
     def inverse(self, value):
         y, x = [self.vmin, self.vcenter, self.vmax], [0, 0.5, 1]
         return np.interp(value, x, y, left=-np.inf, right=np.inf)
 
+
 colors_undersea = plt.cm.terrain(np.linspace(0, 0.17, 256))
 colors_land = plt.cm.terrain(np.linspace(0.25, 1, 256))
 all_colors = np.vstack((colors_undersea, colors_land))
-terrain_map = mpl.colors.LinearSegmentedColormap.from_list('terrain_map',
-                                                           all_colors)
+terrain_map = mpl.colors.LinearSegmentedColormap.from_list("terrain_map", all_colors)
 # Отображаем тепловую карту
-midnorm = MidpointNormalize(vmin=-500., vcenter=0, vmax=4000)
+midnorm = MidpointNormalize(vmin=-500.0, vcenter=0, vmax=4000)
 
 norm = mpl.colors.Normalize(vmin=0, vmax=100)
 fig.colorbar(
@@ -82,9 +82,9 @@ fig.colorbar(
     norm=midnorm,
     cax=ax,
     ticks=[-500, 0, 500, 1000, 2000, 3000, 4000],
-    spacing='uniform',
-    orientation='vertical',
-    extend='both'
+    spacing="uniform",
+    orientation="vertical",
+    extend="both",
 )
 
-plt.savefig('colorbar.png')
+plt.savefig("colorbar.png")
