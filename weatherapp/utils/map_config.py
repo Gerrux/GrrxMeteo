@@ -14,5 +14,5 @@ SE_LONGITUDE = 51
 STEP_DEGREES = 0.1
 
 # Стартовый и минимальный зум
-START_ZOOM = 7
+START_ZOOM = 8
 MIN_ZOOM = 7

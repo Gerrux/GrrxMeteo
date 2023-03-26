@@ -56,10 +56,10 @@ if __name__ == "__main__":
     jsons = loop.run_until_complete(fetch_all_coordinates(urls))
     forecast = []
     time_now = datetime.now()
-    hour_list = [time_now + datetime.timedelta(hours=x) for x in range(24)]
+    hour_list = [time_now + timedelta(hours=x) for x in range(24)]
     for json in jsons:
-        if pd.to_datetime(json["hourly"]["time"]) not in hour_list:
-            continue
+        # if pd.to_datetime(json["hourly"]["time"]) not in hour_list:
+        #     continue
         latitude, longitude = json["latitude"], json["longitude"]
         forecast_df = pd.DataFrame(
             {

@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="{% static "weatherapp/style.css" %}">
+    <link rel="stylesheet" href="{% static 'weatherapp/styles/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'weatherapp/styles/style.css' %}">
 </head>
 <body>
-
-    <div>{{ weather_map|safe }}</div>
+    <h2>КАРТЫ</h2>
+    <div class="map">{{ weather_map|safe }}</div>
 </body>
 </html>

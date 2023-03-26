@@ -1,9 +1,12 @@
+from datetime import datetime
+
 import folium
 from django.http import HttpResponse
 from django.shortcuts import render
 import statistics
 
 # Create your views here.
+from weatherapp.models import Map
 
 
 def index(request):
@@ -17,9 +20,10 @@ def index(request):
     map = folium.Map(
         location=[mean_lat, mean_lon], zoom_start=7, min_zoom=7, tiles="OpenStreetMap"
     )
-
+    time_now = datetime.now().strftime("%Y-%m-%d %H")
+    maps = Map.objects.filter(timestamp=time_now)
     folium.raster_layers.ImageOverlay(
-        image="./weatherapp/maps/heat_map.png",
+        image=maps[0].map_path,
         name='<span style="color: red;">Temperature</span>',
         opacity=0.5,
         bounds=[[min_lat, min_lon], [max_lat, max_lon]],
@@ -28,7 +32,7 @@ def index(request):
     ).add_to(map)
 
     folium.raster_layers.ImageOverlay(
-        image="./weatherapp/maps/humidity_map.png",
+        image=maps[1].map_path,
         name='<span style="color: #5d76cb;">Humidity</span>',
         opacity=0.8,
         bounds=[[min_lat, min_lon], [max_lat, max_lon]],
@@ -38,7 +42,7 @@ def index(request):
     ).add_to(map)
 
     folium.raster_layers.ImageOverlay(
-        image="./weatherapp/maps/cloudcover_map.png",
+        image=maps[2].map_path,
         name='<span style="color: grey;">Cloudcover</span>',
         opacity=0.8,
         bounds=[[min_lat, min_lon], [max_lat, max_lon]],
@@ -47,18 +51,18 @@ def index(request):
         zindex=1,
     ).add_to(map)
 
-    folium.raster_layers.ImageOverlay(
-        image="./weatherapp/maps/elevation_map.png",
-        name='<span style="color: orange;">Elevation</span>',
-        opacity=0.8,
-        bounds=[[min_lat, min_lon], [max_lat, max_lon]],
-        interactive=True,
-        show=False,
-        zindex=1,
-    ).add_to(map)
+    # folium.raster_layers.ImageOverlay(
+    #     image="./weatherapp/maps/elevation_map.png",
+    #     name='<span style="color: orange;">Elevation</span>',
+    #     opacity=0.8,
+    #     bounds=[[min_lat, min_lon], [max_lat, max_lon]],
+    #     interactive=True,
+    #     show=False,
+    #     zindex=1,
+    # ).add_to(map)
 
     folium.raster_layers.ImageOverlay(
-        image="./weatherapp/maps/wind_map.png",
+        image=maps[3].map_path,
         name='<span style="color: darkblue;">Wind</span>',
         opacity=0.6,
         bounds=[[min_lat, min_lon], [max_lat, max_lon]],

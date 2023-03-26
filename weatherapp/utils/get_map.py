@@ -57,12 +57,14 @@ if __name__ == "__main__":
     forecast_df = pd.read_csv("data_weather.csv")
     forecast_df["time"] = pd.to_datetime(forecast_df["time"])
     time_now = pd.to_datetime(datetime.now().strftime("%Y/%m/%d %H"))
-    for hour in range(24):
+    maps = []
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(1, 1, 1)
+    for hour in range(12):
         time = time_now + timedelta(hours=hour)
         forecast_now = forecast_df[forecast_df["time"] == time]
         time_filename = time.strftime("%Y%m%d_%H%M%S")
-        fig = plt.figure(figsize=(10, 8))
-        ax = fig.add_subplot(1, 1, 1)
+        timestamp = time.strftime("%Y-%m-%d %H:00[:00[.000000]][0]")
         lon_min, lon_max = forecast_now["longitude"].min(), forecast_now["longitude"].max()
         lat_min, lat_max = forecast_now["latitude"].min(), forecast_now["latitude"].max()
 
@@ -94,7 +96,7 @@ if __name__ == "__main__":
         )
         filename = get_path_to_file_from_root(f"../media/maps/{time_filename}heat_map.png")
         heat_map = save_ax(ax, filename)
-        Map.objects.create(title="heat_map", map_path=filename, timestamp=time)
+        maps.append(("heat_map", time, filename))
         plt.cla()
 
         # Создание карты влажности
@@ -120,7 +122,7 @@ if __name__ == "__main__":
         humidity_map = save_ax(
             ax, filename
         )
-        Map.objects.create(title="humidity_map", map_path=filename, timestamp=time)
+        maps.append(("humidity_map", time, filename))
         plt.cla()
 
         # Создание карты облачности
@@ -146,7 +148,7 @@ if __name__ == "__main__":
         cloudcover_map = save_ax(
             ax, filename
         )
-        Map.objects.create(title="cloudcover_map", map_path=filename, timestamp=time)
+        maps.append(("cloudcover_map", time, filename))
         plt.cla()
 
         # # Создание карты высоты поверхности
@@ -200,9 +202,7 @@ if __name__ == "__main__":
         )
 
         # Отображаем стрелки направления ветра
-        for dot in forecast_df.itertuples():
-            if dot.Index % 2 == 0:
-                continue
+        for dot in forecast_now.itertuples():
             u = -0.2 * sin(dot.winddirection * pi / 180)
             v = -0.2 * cos(dot.winddirection * pi / 180)
             plt.arrow(
@@ -218,9 +218,13 @@ if __name__ == "__main__":
             )
         filename = get_path_to_file_from_root(f"../media/maps/{time_filename}wind_map.png")
         wind_map = save_ax(ax, filename)
-        Map.objects.create(title="wind_map", map_path=filename, timestamp=time)
-        plt.clf()
+        maps.append(("wind_map", time, filename))
+        plt.cla()
         print(time_filename)
+    Map.objects.bulk_create([Map(**{'title': m[0],
+                                    'timestamp': m[1],
+                                    'map_path': m[2]})
+                                    for m in maps])
         # Добавление карты на фон
 
         # # Создание карты OpenStreetMap
