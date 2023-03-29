@@ -43,12 +43,12 @@ bounds = np.linspace(0, 100, 11)
 # norm = mpl.colors.BoundaryNorm(bounds, my_cmap.N)
 norm = mpl.colors.Normalize(vmin=0, vmax=100)
 fig.colorbar(
-    mpl.cm.ScalarMappable(cmap='Blues', norm=norm),
+    mpl.cm.ScalarMappable(cmap="Blues", norm=norm),
     cax=ax,
-    extendfrac='auto',
+    extendfrac="auto",
     ticks=bounds,
-    spacing='uniform',
-    orientation='vertical'
+    spacing="uniform",
+    orientation="vertical",
 )
 #
 # plt.savefig('cloudcover_colorbar.png', transparent=True)

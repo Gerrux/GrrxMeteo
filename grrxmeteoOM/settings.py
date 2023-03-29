@@ -124,6 +124,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
     BASE_DIR / "static/weatherapp/images/",
     BASE_DIR / "static/weatherapp/styles/",
+    BASE_DIR / "static/weatherapp/scripts/",
 ]
 
 # Default primary key field type

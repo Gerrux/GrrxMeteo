@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap');
+html {
+    overflow: hidden;
+}
+
+.colorbar {
+    display: none;
+    position: absolute;
+    max-height: 50%;
+    top: 200px;
+    right: 0;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.active-colorbar {
+    display: block;
+}
+
+#wind-colorbar {
+    top: 150px;
+    right: auto;
+    left: 0;
+    width: 30%;
+    height: auto;
+}
+
+ul.navbar-map-type, ul.navbar-map-hour {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin: 20px auto;
+    list-style-type: none;
+    padding: 0;
+    overflow: hidden;
+    background-color: #DCE9EA;
+    border-radius: 10px;
+}
+
+li.navbar-btn-t, li.navbar-btn-h {
+    float: left;
+    border-radius: 10px;
+    margin: 0;
+}
+
+li.navbar-btn-t span, li.navbar-btn-h span {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    color: #1D3557;
+    text-align: center;
+    padding: 10px 12px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.active {
+    background-color: #BFCBCC;
+}
+
+li.navbar-btn-t:hover, li.navbar-btn-h:hover {
+    background-color: #BFCBCC;
+}
+
+.folium-map {
+    border-radius: 10px;
+    overflow: hidden;
+}
+/*.leaflet-control {*/
+/*    display: none;*/
+/*}*/

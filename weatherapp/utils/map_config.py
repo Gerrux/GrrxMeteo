@@ -11,8 +11,8 @@ SE_LATITUDE = 61
 SE_LONGITUDE = 51
 
 # Шаг точности сбора данных в градусах
-STEP_DEGREES = 0.1
+STEP_DEGREES = 1
 
 # Стартовый и минимальный зум
-START_ZOOM = 8
+START_ZOOM = 9
 MIN_ZOOM = 7

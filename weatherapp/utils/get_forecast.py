@@ -2,7 +2,6 @@ import asyncio
 import ssl
 from datetime import datetime, timedelta
 from random import random
-
 import aiohttp
 import numpy as np
 import pandas as pd
@@ -74,8 +73,12 @@ if __name__ == "__main__":
         )
         forecast_df["time"] = pd.to_datetime(forecast_df["time"])
         time_now = pd.to_datetime(datetime.now().strftime("%Y/%m/%d %H"))
-        time_after_day = pd.to_datetime((datetime.now() + timedelta(days=1)).strftime("%Y/%m/%d %H"))
-        forecast_day_df = forecast_df.loc[(forecast_df["time"] >= time_now) & (forecast_df["time"] <= time_after_day)]
+        time_after_day = pd.to_datetime(
+            (datetime.now() + timedelta(days=1)).strftime("%Y/%m/%d %H")
+        )
+        forecast_day_df = forecast_df.loc[
+            (forecast_df["time"] >= time_now) & (forecast_df["time"] <= time_after_day)
+        ]
         for hour in range(24):
             time = time_now + timedelta(hours=hour)
             forecast_now = forecast_day_df[forecast_day_df["time"] == time]
@@ -84,13 +87,19 @@ if __name__ == "__main__":
                     "latitude": latitude,
                     "longitude": longitude,
                     "time": time,
-                    "elevation": float(forecast_now["elevation"]),
-                    "temperature": float(forecast_now["temp"]),
-                    "humidity": float(forecast_now["humidity"]),
-                    "cloudcover": int(forecast_now["cloudcover"]),
-                    "windspeed": float(forecast_now["windspeed"]),
-                    "winddirection": int(forecast_now["winddirection"]),
+                    "elevation": forecast_now["elevation"],
+                    "temperature": forecast_now["temp"],
+                    "humidity": forecast_now["humidity"],
+                    "cloudcover": forecast_now["cloudcover"],
+                    "windspeed": forecast_now["windspeed"],
+                    "winddirection": forecast_now["winddirection"],
                 }
             )
     forecast_df = pd.DataFrame(forecast)
+    forecast_df["elevation"] = forecast_df["elevation"].astype("float64")
+    forecast_df["temperature"] = forecast_df["temperature"].astype("float64")
+    forecast_df["humidity"] = forecast_df["humidity"].astype("float64")
+    forecast_df["windspeed"] = forecast_df["windspeed"].astype("float64")
+    forecast_df["cloudcover"] = forecast_df["cloudcover"].astype("int32")
+    forecast_df["winddirection"] = forecast_df["winddirection"].astype("int32")
     forecast_df.to_csv("data_weather.csv")
