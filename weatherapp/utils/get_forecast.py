@@ -22,14 +22,19 @@ ssl_ctx.verify_mode = ssl.CERT_NONE
 
 urls = []
 
-
 for latitude in np.arange(SE_LATITUDE, NW_LATITUDE, STEP_DEGREES):
     for longitude in np.arange(NW_LONGITUDE, SE_LONGITUDE, STEP_DEGREES):
         urls.append(
             f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&hourly=temperature_2m,relativehumidity_2m,pressure_msl,windspeed_10m,winddirection_10m,cloudcover"
         )
 
+
 # print(len(urls))
+
+async def get_single_geolocation_forecast(geolocation):
+    url = [
+        f"https://api.open-meteo.com/v1/forecast?latitude={geolocation[0]}&longitude={geolocation[1]}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m"]
+    return await fetch_all_coordinates(url)
 
 
 async def fetch_coordinate(session, url):
@@ -78,7 +83,7 @@ if __name__ == "__main__":
         )
         forecast_day_df = forecast_df.loc[
             (forecast_df["time"] >= time_now) & (forecast_df["time"] <= time_after_day)
-        ]
+            ]
         for hour in range(24):
             time = time_now + timedelta(hours=hour)
             forecast_now = forecast_day_df[forecast_day_df["time"] == time]

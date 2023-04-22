@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime, timedelta
 import time as t
 import folium
@@ -5,10 +6,10 @@ from branca.element import CssLink, JavascriptLink
 from django.http import HttpResponse
 from django.shortcuts import render
 import statistics
-
 # Create your views here.
 from weatherapp.models import Map
-from weatherapp.utils.get_path import get_client_ip
+from weatherapp.utils.get_forecast import get_single_geolocation_forecast
+from weatherapp.utils.get_path import get_client_ip, get_location_by_ip
 
 
 def index(request):
@@ -18,7 +19,6 @@ def index(request):
     min_lon = 35
     mean_lat = statistics.mean([min_lat, max_lat])
     mean_lon = statistics.mean([min_lon, max_lon])
-    start_time = t.time()
     map = folium.Map(
         location=[mean_lat, mean_lon], zoom_start=7, min_zoom=7, tiles="OpenStreetMap"
     )
@@ -43,7 +43,6 @@ def index(request):
                     show=False,
                     zindex=1,
                 ).add_to(map)
-                print(t.time()-start_time)
             case "humidity_map":
                 folium.raster_layers.ImageOverlay(
                     image=m.map_path,
@@ -54,7 +53,6 @@ def index(request):
                     show=False,
                     zindex=1,
                 ).add_to(map)
-                print(t.time() - start_time)
             case "cloudcover_map":
                 folium.raster_layers.ImageOverlay(
                     image=m.map_path,
@@ -65,7 +63,6 @@ def index(request):
                     show=False,
                     zindex=1,
                 ).add_to(map)
-                print(t.time() - start_time)
             case "wind_map":
                 folium.raster_layers.ImageOverlay(
                     image=m.map_path,
@@ -76,7 +73,6 @@ def index(request):
                     show=False,
                     zindex=1,
                 ).add_to(map)
-                print(t.time() - start_time)
         hour += 1
     # folium.raster_layers.ImageOverlay(
     #     image="./weatherapp/maps/elevation_map.png",
@@ -128,12 +124,17 @@ def index(request):
     map.get_root().html.add_child(JavascriptLink("../static/weatherapp/scripts/map.js"))
     map.render()
     map_html = map._repr_html_()
+
+    ip = get_client_ip(request)
+    location = get_location_by_ip(ip)
+    forecast_on_ip = asyncio.run(get_single_geolocation_forecast(location))
     return render(
         request,
         "weatherapp/index.html",
         context={
             "weather_map": map_html,
             "now": datetime.strftime(datetime.now(), "%d-%m-%Y %H:%M:%S"),
-            "ip": get_client_ip(request),
+            "ip": ip,
+            "client_temperature": forecast_on_ip[0]["current_weather"]["temperature"]
         },
     )
