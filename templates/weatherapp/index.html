@@ -1,11 +1,26 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{% static 'weatherapp/styles/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'weatherapp/styles/style.css' %}">
 </head>
 <body>
+    <header>
+        <h1>GMETEO</h1>
+    </header>
+    <h2>КАРТЫ</h2>
 
-    <div>{{ weather_map|safe }}</div>
+    <div class="map">
+        <div class="wrapper-map">{{ weather_map|safe }}</div>
+    </div>
+
+    <footer>
+        Запрос обработан: {{ now }}
+        <p>Ваш IP: {{ ip }} | Температура: {{ client_temperature }}°C</p>
+    </footer>
 </body>
+<script src="{% static 'weatherapp/scripts/navbar.js' %}"></script>
 </html>

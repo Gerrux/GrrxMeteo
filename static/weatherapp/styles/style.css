@@ -1,0 +1,46 @@
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    width: 90%;
+    margin: 0 auto;
+    padding-top: 10px;
+    background-color: white;
+}
+
+h1 {
+    padding: 10px 0;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 48px;
+    color: #1D3557;
+}
+
+h1::first-letter {
+    color: #608BFA;
+}
+
+h2 {
+    padding: 10px 0;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 36px;
+    color: #1D3557;
+}
+
+.map {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 90vh;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.wrapper-map {
+    width: 100%;
+    height: 100%;
+}
